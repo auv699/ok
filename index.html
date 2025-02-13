@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>查询系统</title>
     <style>
+        /* 引入自定义字体 */
+        @font-face {
+            font-family: 'HYTiaoTiao';
+            src: url('https://www.jiasorry.com/assets/font/HYTiaoTiao.ttf') format('truetype');
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'HYTiaoTiao', Arial, sans-serif;
             background: linear-gradient(135deg, #74ebd5, #9face6);
             display: flex;
             justify-content: center;
@@ -15,6 +21,7 @@
             margin: 0;
             flex-direction: column;
         }
+
         .logo {
             width: 100px;
             height: 100px;
@@ -26,6 +33,7 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .container {
             background: white;
             padding: 20px;
@@ -35,6 +43,7 @@
             width: 90%;
             max-width: 400px;
         }
+
         input {
             width: 80%;
             padding: 10px;
@@ -42,6 +51,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         button {
             background: #4CAF50;
             color: white;
@@ -50,12 +60,30 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background: #45a049;
         }
+
         #result {
             margin-top: 20px;
             color: #333;
+        }
+
+        /* 手机适配 */
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            input {
+                width: 90%;
+            }
+
+            button {
+                width: 90%;
+            }
         }
     </style>
 </head>
@@ -70,8 +98,9 @@
 
     <script>
         let fileContent = ""; // 用于存储服务器上的文件内容
+        let fileLoaded = false; // 文件是否加载完毕
 
-        // 读取服务器上的 2读取内容.txt
+        // 读取服务器上的 key.txt 文件
         function loadFile() {
             fetch('https://auv699.github.io/ok/J/key.txt')  // 确保路径正确
                 .then(response => {
@@ -82,12 +111,26 @@
                 })
                 .then(data => {
                     fileContent = data;  // 存储文件内容
+                    fileLoaded = true;  // 文件加载成功
                     console.log("文件内容已加载:", fileContent); // 打印文件内容
                 })
                 .catch(error => {
                     console.error("错误:", error);
                     alert("无法加载文件，请检查服务器路径！");
                 });
+        }
+
+        // 转义HTML字符以防止XSS攻击
+        function escapeHTML(str) {
+            return str.replace(/[&<>"']/g, function (char) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[char];
+            });
         }
 
         // 查询内容
@@ -98,17 +141,14 @@
                 return;
             }
 
-            if (!fileContent) {
+            if (!fileLoaded) {
                 document.getElementById("result").innerText = "文件未加载，请稍后重试！";
                 return;
             }
 
             // 检查文件内容中是否包含查询的内容
-            if (fileContent.includes(query)) {
-                document.getElementById("result").innerText = "查询结果: 已存在";
-            } else {
-                document.getElementById("result").innerText = "查询结果: 不存在";
-            }
+            const resultMessage = fileContent.includes(query) ? "查询结果: 已存在" : "查询结果: 不存在";
+            document.getElementById("result").innerText = escapeHTML(resultMessage);
         }
 
         // 页面加载时自动读取文件内容
