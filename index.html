@@ -68,15 +68,12 @@
         <p id="result"></p>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
-
     <script>
-        let encryptedFileContent = ""; // 用于存储加密后的文件内容
-        const encryptionKey = "mySecretKey123"; // 设定加密密钥
+        let fileContent = ""; // 用于存储服务器上的文件内容
 
-        // 读取服务器上的加密文件 encrypted.txt
+        // 读取服务器上的 2读取内容.txt
         function loadFile() {
-            fetch('/1/key.txt')  // 确保路径正确
+            fetch('2读取内容.txt')  // 确保路径正确
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('文件加载失败！');
@@ -84,27 +81,13 @@
                     return response.text();
                 })
                 .then(data => {
-                    encryptedFileContent = data;  // 存储加密后的文件内容
-                    console.log("加密文件内容已加载:", encryptedFileContent);
-                    // 解密并输出文件内容
-                    const decryptedContent = decryptText(encryptedFileContent);
-                    console.log("解密后的内容:", decryptedContent);
+                    fileContent = data;  // 存储文件内容
+                    console.log("文件内容已加载:", fileContent); // 打印文件内容
                 })
                 .catch(error => {
                     console.error("错误:", error);
                     alert("无法加载文件，请检查服务器路径！");
                 });
-        }
-
-        // 加密函数
-        function encryptText(text) {
-            return CryptoJS.AES.encrypt(text, encryptionKey).toString();
-        }
-
-        // 解密函数
-        function decryptText(encryptedText) {
-            const bytes = CryptoJS.AES.decrypt(encryptedText, encryptionKey);
-            return bytes.toString(CryptoJS.enc.Utf8);  // 解密并转为字符串
         }
 
         // 查询内容
@@ -115,29 +98,21 @@
                 return;
             }
 
-            if (!encryptedFileContent) {
+            if (!fileContent) {
                 document.getElementById("result").innerText = "文件未加载，请稍后重试！";
                 return;
             }
 
-            // 解密文件内容
-            const decryptedContent = decryptText(encryptedFileContent);
-
-            // 检查解密后的文件内容中是否包含查询的内容
-            if (decryptedContent.includes(query)) {
+            // 检查文件内容中是否包含查询的内容
+            if (fileContent.includes(query)) {
                 document.getElementById("result").innerText = "查询结果: 已存在";
             } else {
                 document.getElementById("result").innerText = "查询结果: 不存在";
             }
         }
 
-        // 页面加载时自动读取并解密文件内容
+        // 页面加载时自动读取文件内容
         window.onload = loadFile;
-
-        // 示例：加密文本（用作上传前的加密）
-        const originalText = "这是一个示例文件内容，用于测试加密！";
-        const encryptedText = encryptText(originalText);
-        console.log("加密后的内容:", encryptedText);  // 在开发时检查加密内容
     </script>
 </body>
 </html>
