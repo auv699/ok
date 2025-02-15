@@ -69,10 +69,10 @@ function getNetworkSpeed() {
         .then(response => {
             const endTime = Date.now();
             const latency = endTime - startTime;
-            document.getElementById("speed").innerText = `网速: ${latency}ms`;
+            document.getElementById("speed").innerText = ` ${latency}ms`;
         })
         .catch(error => {
-            document.getElementById("speed").innerText = "网速: 无法获取";
+            document.getElementById("speed").innerText = " 无法获取";
         });
 }
 
