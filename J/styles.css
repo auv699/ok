@@ -40,6 +40,31 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center; /* 让容器内部内容居中 */
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    width: 100%;
+}
+
+.input-wrapper input {
+    padding-left: 40px; /* 为了给图片留出空间 */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-wrapper::before {
+    content: "";
+    position: absolute;
+    left: 10px; /* 距离输入框左边的距离 */
+    width: 20px; /* 图片宽度 */
+    height: 20px; /* 图片高度 */
+    background-image: url('https://img.jiasorry.com/icons8-card.gif');
+    background-size: cover;
+    background-position: center;
 }
 
 input {
@@ -62,9 +87,12 @@ input:focus {
 }
 
 #result {
-    margin-top: 20px;
+    margin-top: 20px; /* 让结果在输入框下方有一定间距 */
     color: #333;
     font-family: 'HYTiaoTiao', Arial, sans-serif;
+    text-align: center; /* 让文本居中 */
+    width: 100%; /* 让其占满父容器 */
+    display: block; /* 确保它是块级元素 */
 }
 
 #speed {
@@ -77,31 +105,6 @@ input:focus {
     border-radius: 5px;
     font-family: 'HYTiaoTiao', Arial, sans-serif;
 }
-
-.input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center; /* 垂直居中 */
-}
-
-.input-wrapper input {
-    padding-left: 40px; /* 为了给图片留出空间 */
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.input-wrapper::before {
-    content: "";
-    position: absolute;
-    left: 10px; /* 距离输入框左边的距离 */
-    width: 20px; /* 图片宽度 */
-    height: 20px; /* 图片高度 */
-    background-image: url('https://img.jiasorry.com/icons8-card.gif');
-    background-size: cover;
-    background-position: center;
-}
-
-
 
 /* 手机适配 */
 @media (max-width: 600px) {
